@@ -1,0 +1,20 @@
+{
+  "name": "sentenceDemo",
+  "version": "1.0.0",
+  "description": "Node.js and MongoDb demo.",
+  "main": "Server.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "Node.js",
+    "mongoDb"
+  ],
+  "author": "Slava Barkal",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.13.3",
+    "express": "^4.13.3",
+    "mongoose": "^4.1.2"
+  }
+}
