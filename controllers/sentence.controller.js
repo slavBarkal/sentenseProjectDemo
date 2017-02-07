@@ -4,11 +4,13 @@
 
 "use strict";
 
+var stringSimilarity = require('string-similarity');
+
 var SentenceCtrl = function(Sentence){
 
     var SentenceObj = {};
 
-    SentenceObj.PostSentence = function(req, res, next){
+    SentenceObj.PostSentence = function(req, res){
         var body = {sentence: req.body.sentence};
         var newSentence = new Sentence(body);
         newSentence.save(function(err, sentence){
@@ -20,7 +22,7 @@ var SentenceCtrl = function(Sentence){
         });
     }
 
-    SentenceObj.GetSentences = function(req, res, next){
+    SentenceObj.GetSentences = function(req, res){
         Sentence.find(function(err, sentences){
             if(err) {
                 res.json({status: false, error: "Something went wrong"});
@@ -30,26 +32,17 @@ var SentenceCtrl = function(Sentence){
         });
     }
 
-    SentenceObj.UpdateSentence = function(req, res, next){
-        var sentence = req.body.sentence;
-        Sentence.findById(req.params.sentence_id, function(err, updateSentence){
-            updateSentence.sentence = sentence;
-            updateSentence.save(function(err, sen){
-                if(err) {
-                    res.json({status: false, error: "Sentence not updated"});
-                }
-                res.json({status: true, message: "Sentence updated successfully"});
-            });
-        });
-    }
+    SentenceObj.GetSentenceSimilarity = function(req, res, next){
+        var arrSentences = [];
+        Sentence.find(function(err, sentences){
+            arrSentences = sentences.map(function(sentence){
+                   return sentence.sentence;
+               })
 
-    SentenceObj.DeleteSentence = function(req, res, next){
-        Sentence.remove({_id : req.params.sentence_id }, function(err, sentences){
-            if(err) {
-                res.json({status: false, error: "Deleting sentence is not successfull"});
-            }
-            res.json({status: true, message: "Sentence deleted successfully"});
-        });
+            var sentenceToCheck = req.params.sentence;
+            var result = stringSimilarity.findBestMatch(sentenceToCheck,arrSentences);
+            res.json({status: true, bestMatch : result.bestMatch, allRatings: result.ratings});
+        })
     }
 
     return SentenceObj;

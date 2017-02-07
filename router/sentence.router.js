@@ -12,8 +12,6 @@ module.exports = function(app){
     // Add new sentence to db
     app.post('/api/sentences', Sentenceontroller.PostSentence);
 
-    app.put('/api/sentences/:sentence_id', Sentenceontroller.UpdateSentence);
-
-    app.delete('/api/sentences/:sentence_id', Sentenceontroller.DeleteSentence);
-
+    //check Similarity
+    app.get('/api/sentenceSimilarity/:sentence', Sentenceontroller.GetSentenceSimilarity)
 }
